@@ -27,7 +27,7 @@ MARGIN_BOTTOM = 260
 def crop(file):
     #reading the image 
     image = cv2.imread(file)
-    edged = cv2.Canny(image, 10, 70)
+    edged = cv2.Canny(image, 10, 50)
 
     # #applying closing function
     kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (7, 7))
@@ -41,6 +41,10 @@ def crop(file):
     x,y,w,h = cv2.boundingRect(c)
 
     # draw the biggest contour (c) in white
+    x = x - 20
+    y = y - 20
+    w = w + 20
+    h = h + 20
     image = cv2.rectangle(image,(x,y),(x+w,y+h),(0,0,0),1)
     
     #crop the image

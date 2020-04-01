@@ -33,7 +33,7 @@ for row in csv_f: # per each row in csv file
 
         newimg = f'{row[0]}_{last2digit}_{y}_1.jpg' # final filename we want
 
-        imgs = os.listdir(locainputdir) # gets list of images in a directory
+        imgs = sorted(os.listdir(locainputdir)) # gets list of images in a directory (add sorted or it won't work on some workstations)
         imgoldpath = os.path.join(locainputdir, imgs[0]) # set fullpath of first image in directory
         imgnewpath = os.path.join(locaout, newimg) # set fullpath of image in target directory
 

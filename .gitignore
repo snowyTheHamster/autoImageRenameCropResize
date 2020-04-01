@@ -1,2 +1,6 @@
 .venv/
 .vscode/
+inputimages/
+renamed/
+resized800/
+cropped/

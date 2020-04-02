@@ -2,6 +2,7 @@ import os
 import cv2
 from PIL import Image
 import sys, shutil
+import numpy as np
 
 #this method uses the canny method first
 #experiment with masking a range of color in the future: https://stackoverflow.com/questions/44588279/find-and-draw-the-largest-contour-in-opencv-on-a-specific-color-python
@@ -23,14 +24,29 @@ MARGIN_LEFT = 30
 MARGIN_RIGHT = 30
 MARGIN_BOTTOM = 260
 
+#Threshold Settings
+CANNY_MIN = 15
+CANNY_MAX = 30
+
+#Products Margins within Rectangle
+LEFT = 10
+TOP = 10
+RIGHT = 0
+BOTTOM = 10
+
+#Fill Color Outside Contour
+FILL_COLOR = [255, 255, 255] # any BGR color value to fill with
+MASK_VALUE = 255 # 1 channel white (can be any non-zero uint8 value)
+
 
 def crop(file):
     #reading the image 
     image = cv2.imread(file)
-    edged = cv2.Canny(image, 10, 30)
+    edged = cv2.Canny(image, CANNY_MIN, CANNY_MAX)
+
 
     # #applying closing function
-    kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (7, 7))
+    kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (13, 13))
     closed = cv2.morphologyEx(edged, cv2.MORPH_CLOSE, kernel)
 
     #finding_contours 
@@ -38,16 +54,28 @@ def crop(file):
 
     #find the biggest contour
     c = max(cnts, key = cv2.contourArea)
-    x,y,w,h = cv2.boundingRect(c)
 
-    # draw the biggest contour (c) in white
-    x = x - 20
-    y = y - 20
-    w = w + 20
-    h = h + 20
-    image = cv2.rectangle(image,(x,y),(x+w,y+h),(0,0,0),1)
-    
-    #crop the image
+    #place c back in a list
+    list_c = [ np.array( c ) ] 
+
+    ##FILL OUTSIDE OF COUTOUR WITH COLOR
+    stencil = np.zeros(image.shape[:-1]).astype(np.uint8)
+    cv2.fillPoly(stencil, list_c, MASK_VALUE)
+    sel = stencil != MASK_VALUE # select everything that is not MASK_VALUE
+    image[sel] = FILL_COLOR # and fill it with FILL_COLOR
+
+
+    #MAKE RECTANGLE & CROP
+    # Make a rectangle from the largest coutour
+    x,y,w,h = cv2.boundingRect(c)
+    # Set margins for the Rectangle to prevent clipping of product
+    x = x - LEFT
+    y = y - TOP
+    w = w + RIGHT
+    h = h + BOTTOM
+    # draw the biggest contour (c) in white(255) with 1px border
+    image = cv2.rectangle(image,(x,y),(x+w,y+h),(255, 255, 255), 1)
+    # crop the image
     cropped_image = image[y:y+h, x:x+w]
 
     # Save image to output dir
@@ -105,10 +133,12 @@ for subdir, dirs, files in os.walk(f'./{CROPPED_DIR}'):
             im = i.resize(new_size, Image.ANTIALIAS)
             new_im = Image.open(f'{BG_DIR}/bg-fff-800x800.jpg')
             new_im.paste(im, ((WIDTH - new_size[0]) // 2, HEIGHT - new_size[1] - MARGIN_BOTTOM))
+            print(f'Resizing {filename}...')
 
             try:
                 os.stat('./' + RESIZED_DIR)
             except:
                 os.mkdir('./' + RESIZED_DIR)
 
+            print("Saving " + filename + " to " + RESIZED_DIR + " folder")
             new_im.save(f'./{RESIZED_DIR}/{fn}{fext}')

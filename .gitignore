@@ -1,9 +1,16 @@
 .venv/
 .vscode/
-inputimages/*
-renamed/*
-resized800/*
-testrefined/*
-cropped/
+# inputimages/*
+# renamed/*
+# resized800/*
+# testrefined/*
+# cropped/*
 test.py
 testdir/
+*.jpg
+*.jpeg
+*.png
+*.tif
+*.gif
+
+!renamed/sample.jpg

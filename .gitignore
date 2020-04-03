@@ -5,7 +5,6 @@
 # resized800/*
 # testrefined/*
 # cropped/*
-test.py
 testdir/
 *.jpg
 *.jpeg

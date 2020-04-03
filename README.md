@@ -16,35 +16,29 @@ cd mydirrrrrr
 git clone https://github.com/snowyTheHamster/autoImageRenameCropResize.git .
 ```
 
-### Create and activate a virtual Environment
+### Create a virtual Environment
 ```
 python -m venv .venv
 ```
 
-**Mac and Linux:**
+**Active the virtual Env in Mac and Linux:**
 ```
 . .venv/bin/activate
 
 ```
 
-**Windows:**
+**Active the virtual Env in Windows:**
 ```
 . .venv/script/activate
 
 ```
 
-### Install the modules
+### Install the modules from the provided req file
 ```
 pip install -r requirements.txt
 ```
 
 ## Running the script
-
-Create the following folders in the project folder if they don't yet exist:
-
-```
-mkdir renamed
-```
 
 ### Running the background replacement
 

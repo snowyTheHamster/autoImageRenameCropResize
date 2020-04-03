@@ -1,6 +1,6 @@
 # autoImageRenameCropResize
 
-A script that detects the edges of an object and replaces the background with pure white.
+A Python script that detects the edges of an object and replaces the background with pure white.
 
 ## Setting up
 

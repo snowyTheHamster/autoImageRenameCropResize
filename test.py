@@ -46,10 +46,10 @@ for subdir, dirs, files in os.walk(INPUT_DIR):
                 ret, thresh4 = cv2.threshold(gray, MIN_VAL, MAX_VAL, cv2.THRESH_TOZERO)
                 ret, thresh5 = cv2.threshold(gray, MIN_VAL, MAX_VAL, cv2.THRESH_TOZERO_INV)
 
-                kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (7, 7))
-                closed = cv2.morphologyEx(thresh2, cv2.MORPH_CLOSE, kernel)
+                kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (7, 7)) # CHANGE BETWEEN MORPH_RECT & MORPH_ELLIPSE; Also tweak last parameter(x, x)
+                morphchoice = cv2.morphologyEx(thresh2, cv2.MORPH_CLOSE, kernel) # CHANGE BETWEEN MORPH_CLOSE, MORPH_OPEN, MORPH_DILATE & MORPH_ERODE; Also change between thresh1 - thresh5
 
-                (cnts, _) = cv2.findContours(closed.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+                (cnts, _) = cv2.findContours(morphchoice.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
                 c = max(cnts, key = cv2.contourArea)
 

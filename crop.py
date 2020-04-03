@@ -46,8 +46,8 @@ def crop(file):
 
 
     # #applying closing function
-    kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (13, 13))
-    closed = cv2.morphologyEx(edged, cv2.MORPH_CLOSE, kernel)
+    kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (7, 7))
+    closed = cv2.morphologyEx(edged, cv2.MORPH_DILATE, kernel)
 
     #finding_contours 
     (cnts, _) = cv2.findContours(closed.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)

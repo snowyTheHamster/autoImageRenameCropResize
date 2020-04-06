@@ -4,8 +4,8 @@ from PIL import Image
 import sys, shutil
 import numpy as np
 
-INPUT_DIR = '1_input_images'
-TESTOUT_DIR = '2_bg_removed'
+INPUT_DIR = '0_input_images'
+TESTOUT_DIR = '1_bg_removed'
 
 FILL_COLOR = [255, 255, 255] # any BGR color value to fill with
 MASK_VALUE = 255 # 1 channel white (can be any non-zero uint8 value)

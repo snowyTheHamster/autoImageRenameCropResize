@@ -6,8 +6,8 @@ import numpy as np
 
 
 ##Adjust settings below
-INPUT_DIR = '2_bg_removed'
-OUTPUT_DIR = '3_cropped'
+INPUT_DIR = '1_bg_removed'
+OUTPUT_DIR = '2_cropped'
 MIN_VAL = 210
 MAX_VAL = 200
 

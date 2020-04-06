@@ -6,8 +6,8 @@ import numpy as np
 
 
 ##Adjust settings below
-INPUT_DIR = '3_cropped'
-OUTPUT_DIR = '4_resized800'
+INPUT_DIR = '2_cropped'
+OUTPUT_DIR = '3_resized800'
 BG_DIR = 'backgrounds'
 
 #Final image dimensions:

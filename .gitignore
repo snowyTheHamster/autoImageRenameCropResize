@@ -1,10 +1,10 @@
 .venv/
 .vscode/
-# inputimages/*
-# renamed/*
-# resized800/*
-# testrefined/*
-# cropped/*
+1_input_images/*
+2_bg_removed/*
+3_cropped/*
+4_resized800/*
+5_renamed/*
 testdir/
 *.jpg
 *.jpeg
@@ -12,4 +12,6 @@ testdir/
 *.tif
 *.gif
 
-!renamed/sample.jpg
+!1_input_images/sample.jpg
+!backgrounds/*
+!.gitkeep

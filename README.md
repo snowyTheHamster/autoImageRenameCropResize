@@ -7,8 +7,8 @@ A Python script that detects the edges of an object and replaces the background 
 
 ### Create a Project Directory**
 ```
-mkdir mydirrrrrr
-cd mydirrrrrr
+mkdir myprojname
+cd myprojname
 ```
 
 ### Clone the Repo
@@ -40,44 +40,60 @@ pip install -r requirements.txt
 
 ## Running the script
 
-### Running the background replacement
++ Ensure folder names and settings are correct in each file
 
-Place your images in the **renamed** folder and run the script:
-
-```
-python crop.py
-```
-
-The background should be replaced with pure white BG and the new images should be saved in **resized800** folder.
-
-All images will also be cropped and resized to 800x800 pixels.
-
-These settings can be change in the **crop.py** file.
-
-**Note:**
-
-The quality of the output will depend on the original image and the parameters set in the **crop.py** file.
-
-## Extra - rename images
-
-You can bulk rename images with the **rename.py** script.
-
-Create the input folder:
+Place your images in the **inputimages** folder and run scripts in the following order:
 
 ```
-mkdir inputimages
-```
- 
-place all images in the **inputimages** folder.
-
-Prepare a **list.csv** with the list of items for the filenames.
-
-Modify **rename.py** to set the rules for renaming the images.
-
-run the rename script:
-
-```
-python rename.py
+python 1-removebg.py
+python 2-crop.py
+python 3-resize.py
+python 4-rename.py
 ```
 
-All the images in the **inputimages** folder should be renamed and moved to the **renamed** folder according to the logic written in the **rename.py** file.
+Each script will perform a different task.
+
+This allows you to make adjustments in between in case the results were not perfect.
+
+The quality of the output will depend on:
+
++ Quality of the image
++ Exposure of the background in the image (the brighter the better)
++ Difference between the object in the image and the background (white products are more difficult). 
++ Parameter settings in each script.
+
+### 1-removebg.py
+
+This script detects the edges of an object in an image and tries to removes the background.
+
+You will need to adjust the **MIN_VAL** **MAX_VAL** settings.
+
+The resulting images will generated in a different folder for you to finetune.
+
+An image will not be processed if it already exists in the output folder; so you can re-run the script accordingly.
+
+### 2-crop.py
+
+This script detects the edges of the images again and crops the image.
+
+This step makes it easier to resize the image for the next script.
+
+This script will work on the output of the previous step.
+
+An image will not be processed if it already exists in the output folder; so you can re-run the script accordingly.
+
+### 3-resize.py
+
+This script resizes the images from the previous cropped images.
+
+This script will work on the output of the previous step.
+
+An image will not be processed if it already exists in the output folder; so you can re-run the script accordingly.
+
+### 4-rename.py
+
+This script renames all the images in a folder according to the settings in the script.
+
+You also need to provide a csv file for this script to work.
+
+This script renames **moves** images from previous folder to the next output folder.

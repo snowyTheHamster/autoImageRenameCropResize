@@ -10,7 +10,7 @@ TESTOUT_DIR = '1_bg_removed'
 FILL_COLOR = [255, 255, 255] # any BGR color value to fill with
 MASK_VALUE = 255 # 1 channel white (can be any non-zero uint8 value)
 
-MIN_VAL = 200
+MIN_VAL = 200 #DEFAULT SETTINGS
 MAX_VAL = 10
 
 image_exts = [ '.jpg', '.jpeg', '.png', '.tif' ]

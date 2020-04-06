@@ -46,6 +46,7 @@ Place your images in the **inputimages** folder and run scripts in the following
 
 ```
 python 1-removebg.py
+python 1b-removebg.py
 python 2-crop.py
 python 3-resize.py
 python 4-rename.py
@@ -64,9 +65,19 @@ The quality of the output will depend on:
 
 ### 1-removebg.py
 
-This script detects the edges of an object in an image and tries to removes the background.
+This script detects the edges of an object whilst trying to prevent white clipping.
+
+There may be some fuzziness around object which will be removed in the next script.
 
 You will need to adjust the **MIN_VAL** **MAX_VAL** settings.
+
+The resulting images will generated in a different folder for you to finetune.
+
+An image will not be processed if it already exists in the output folder; so you can re-run the script accordingly.
+
+### 1b-removebg.py
+
+This script tries to remove the fuzziness around the object made in the previous script.
 
 The resulting images will generated in a different folder for you to finetune.
 
@@ -97,3 +108,5 @@ This script renames all the images in a folder according to the settings in the 
 You also need to provide a csv file for this script to work.
 
 This script renames **moves** images from previous folder to the next output folder.
+
+Input Folder must ONLY contain images.

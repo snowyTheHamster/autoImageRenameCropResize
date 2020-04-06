@@ -5,12 +5,12 @@ import sys, shutil
 import numpy as np
 
 INPUT_DIR = '0_input_images'
-TESTOUT_DIR = '1_bg_removed'
+OUTPUT_DIR = '1_bg_removed'
 
 FILL_COLOR = [255, 255, 255] # any BGR color value to fill with
 MASK_VALUE = 255 # 1 channel white (can be any non-zero uint8 value)
 
-MIN_VAL = 200 #DEFAULT SETTINGS
+MIN_VAL = 180 #DEFAULT SETTINGS
 MAX_VAL = 10
 
 image_exts = [ '.jpg', '.jpeg', '.png', '.tif' ]
@@ -28,7 +28,7 @@ for subdir, dirs, files in os.walk(INPUT_DIR):
             continue
 
         else:
-            if os.path.isfile(TESTOUT_DIR +'/'+ output_file_name):
+            if os.path.isfile(OUTPUT_DIR +'/'+ output_file_name):
                 print(f'{output_file_name} exists; skipping')
             
             else:
@@ -36,19 +36,14 @@ for subdir, dirs, files in os.walk(INPUT_DIR):
 
                 image = cv2.imread(INPUT_DIR+'/'+filename)
                 gray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
+                blurred = cv2.bilateralFilter(gray, 6, 131, 131)
 
-                #PLAN A SETTINGS
-                # ret, thresh = cv2.threshold(gray, MIN_VAL, MAX_VAL, cv2.THRESH_BINARY_INV) # options: THRESH_BINARY,THRESH_BINARY_INV,THRESH_TRUNC,THRESH_TOZERO,THRESH_TOZERO_INV
-                # kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (9, 9)) # options: MORPH_RECT,MORPH_ELLIPSE; Also tweak last parameter(x, x)
-                # morphchoice = cv2.morphologyEx(thresh, cv2.MORPH_DILATE, kernel) # options: MORPH_CLOSE,MORPH_OPEN,MORPH_DILATE,MORPH_ERODE
-                # (cnts, _) = cv2.findContours(morphchoice.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE) # finding_contours
+                #PLAN B: Canny
+                thresh = cv2.Canny(blurred, 2, 6)
 
-                #PLAN B SETTINGS
-                edged = cv2.Canny(image, 10, 35)
-                kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (7, 7))
-                closed = cv2.morphologyEx(edged, cv2.MORPH_CLOSE, kernel)
-                (cnts, _) = cv2.findContours(closed.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-
+                kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (9, 9)) # options: MORPH_RECT,MORPH_ELLIPSE; Also tweak last parameter(x, x)
+                morphchoice = cv2.morphologyEx(thresh, cv2.MORPH_DILATE, kernel) # options: MORPH_CLOSE,MORPH_OPEN,MORPH_DILATE,MORPH_ERODE
+                (cnts, _) = cv2.findContours(morphchoice.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE) # finding_contours
                 
                 #find the biggest contour
                 c = max(cnts, key = cv2.contourArea)
@@ -63,4 +58,4 @@ for subdir, dirs, files in os.walk(INPUT_DIR):
                 image[sel] = FILL_COLOR # and fill it with FILL_COLOR
 
                 # Save image to output dir
-                cv2.imwrite(TESTOUT_DIR +'/'+ output_file_name, image)
+                cv2.imwrite(OUTPUT_DIR +'/'+ output_file_name, image)

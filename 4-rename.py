@@ -4,8 +4,7 @@ import shutil
 import glob
 import csv
 
-#PUT THIS SCRIPT, IMAGE DIR & CSV FILE IN THE SAME DIRECTORY
-#This script "MOVES" the original images, you must backup your images elsewhere beforehand.
+# ONLY PUT IMAGES IN THE INPUT FOLDER, watch out for hidden files
 
 locacsv = "list.csv" #csv file name
 imgno = 3 # No. of images per model

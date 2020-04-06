@@ -4,20 +4,16 @@ from PIL import Image
 import sys, shutil
 import numpy as np
 
+INPUT_DIR = '1_bg_removed'
+OUTPUT_DIR = '1_bg_removed_b'
 
-##Adjust settings below
-INPUT_DIR = '1_bg_removed_b'
-OUTPUT_DIR = '2_cropped'
-MIN_VAL = 210
-MAX_VAL = 200
+FILL_COLOR = [255, 255, 255] # any BGR color value to fill with
+MASK_VALUE = 255 # 1 channel white (can be any non-zero uint8 value)
+
+MIN_VAL = 180 #DEFAULT SETTINGS
+MAX_VAL = 10
 
 image_exts = [ '.jpg', '.jpeg', '.png', '.tif' ]
-
-#Products Margins within Rectangle
-LEFT = 0
-TOP = 0
-RIGHT = 0
-BOTTOM = 0
 
 # Iterate over working directory
 directory = os.path.dirname(os.path.realpath(sys.argv[0]))
@@ -34,20 +30,20 @@ for subdir, dirs, files in os.walk(INPUT_DIR):
         else:
             if os.path.isfile(OUTPUT_DIR +'/'+ output_file_name):
                 print(f'{output_file_name} exists; skipping')
-                
+            
             else:
                 print("Processing " + filename + "...")
 
                 image = cv2.imread(INPUT_DIR+'/'+filename)
                 gray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
+                blurred = cv2.bilateralFilter(gray, 6, 131, 131)
 
-                ret, thresh = cv2.threshold(gray, MIN_VAL, MAX_VAL, cv2.THRESH_BINARY_INV) # options: THRESH_BINARY,THRESH_BINARY_INV,THRESH_TRUNC,THRESH_TOZERO,THRESH_TOZERO_INV
+                #PLAN A: threshold
+                ret, thresh = cv2.threshold(blurred, MIN_VAL, MAX_VAL, cv2.THRESH_BINARY_INV) # options: THRESH_BINARY,THRESH_BINARY_INV,THRESH_TRUNC,THRESH_TOZERO,THRESH_TOZERO_INV
 
                 kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (9, 9)) # options: MORPH_RECT,MORPH_ELLIPSE; Also tweak last parameter(x, x)
                 morphchoice = cv2.morphologyEx(thresh, cv2.MORPH_DILATE, kernel) # options: MORPH_CLOSE,MORPH_OPEN,MORPH_DILATE,MORPH_ERODE
-                
-                #finding_contours 
-                (cnts, _) = cv2.findContours(morphchoice.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+                (cnts, _) = cv2.findContours(morphchoice.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE) # finding_contours
                 
                 #find the biggest contour
                 c = max(cnts, key = cv2.contourArea)
@@ -55,19 +51,11 @@ for subdir, dirs, files in os.walk(INPUT_DIR):
                 #place c back in a list
                 list_c = [ np.array( c ) ]
 
-                # Make a rectangle from the largest coutour
-                x,y,w,h = cv2.boundingRect(c)
-                # Set margins for the Rectangle to prevent clipping of product
-                x = x - LEFT
-                y = y - TOP
-                w = w + RIGHT
-                h = h + BOTTOM
-
-                # draw the biggest contour (c) in white(255) with 1px border
-                image = cv2.rectangle(image,(x,y),(x+w,y+h),(255, 255, 255), 1)
-                # crop the image
-                cropped_image = image[y:y+h, x:x+w]
+                #FILL OUTSIDE OF COUTOUR WITH COLOR
+                stencil = np.zeros(image.shape[:-1]).astype(np.uint8)
+                cv2.fillPoly(stencil, list_c, MASK_VALUE)
+                sel = stencil != MASK_VALUE # select everything that is not MASK_VALUE
+                image[sel] = FILL_COLOR # and fill it with FILL_COLOR
 
                 # Save image to output dir
-                cv2.imwrite(OUTPUT_DIR +'/'+ output_file_name, cropped_image)
-                print(f'Saved image to . . . {OUTPUT_DIR} folder')
+                cv2.imwrite(OUTPUT_DIR +'/'+ output_file_name, image)

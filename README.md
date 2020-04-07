@@ -45,29 +45,29 @@ pip install -r requirements.txt
 
 ## Setting up
 
-+ Ensure folder names and settings are correct in each file
++ Ensure folder names and settings are correct in each file.
 
-Ensure you have these folders and files:
+Explanation of each folder and file:
 
 + 0_input_images (add all your images here)
-+ 1_bg_removed   (script that removes bg without clipping highlights but may result in fuzzy edges)
-+ 1_bg_removed_b (stript that removes bg with clean edges but prone to clipping highlights)
-+ 2_cropped      (crops images from 1_bg_removed)
-+ 2_cropped_b    (crops images from 1_bg_removed_b but uses same dimensions as 1_bg_removed)
-+ 3_resized800   (resized images in 2_cropped)
-+ 3_resized800_b (resized images in 2_cropped_b)
-+ 4_renamed      (renames images in 3_resized)
-+ 4_renamed_b    (renames images in 3_resized_b)
++ 1_bg_removed   (outputs bg-removed imgs using threshold)
++ 1_bg_removed_b (outputs bg-removed imgs using canny algorithm)
++ 2_cropped      (cropped imgs saved here)
++ 2_cropped_b    (cropped imgs saved here)
++ 3_resized800   (resized imgs saved here)
++ 3_resized800_b (resized imgs saved here)
++ 4_renamed      (renamed imgs saved here)
++ 4_renamed_b    (renamed imgs saved here)
 + backgrounds
-+ list.csv (input your list of filenames here for **rename** scripts to work)
++ list.csv (list your filenames here for **rename** scripts to work)
 
 ## Running the script
 
 **NOTE:** Detecting white objects against a white background is difficult.
 
-To maximize the success rate, try to **clip out your white background** as bright as possible whilst 
+To maximize the success rate, try to **blowing out your white background** during the photo shoot.
 
-keeping your object's edges as distinct from the background as possible.
+Keep your object's edges as distinct from the background as possible.
 
 ---
 
@@ -104,28 +104,25 @@ or run all the scripts at once:
 python 0-run.py
 ```
 
-Each script will perform a different task.
+Each script will perform one task.
+
+The results from each task is saved in a unique folder.
 
 This allows you to make manual adjustments in between.
 
 The quality of the output will depend on:
 
-+ Quality of the image
-+ The background in the image (the brighter and cleaner, the better)
-+ Difference between the object and the background (products with fuzzy edges and bright edges are difficult) 
-+ Parameter settings in each script.
-
 **NOTE:**
 
 The **removebgB.py** script produces the best quality results but only when the edges are distinct from background.
 
-It is very prone to highlights being clipped.
+It produces poor results for light colored objects.
 
-That is why I included **removebg.py** which is configured to prevent highlights from clipping, but has fuzzy edges.
+That's why I included **removebg.py** which is configured to minimize highlights from clipping, but results in fuzzy edges.
 
-By running both scripts, you will end up with images that are cropped and resized the same; this can allow you to 
+Run both scripts; you'll end up with 2 sets of results with equal crop/size.
 
-stack the images in a photo-editor for easier editing later.
+Stack these images in a photo-editor for finetuning.
 
 
 ## Resizing Images
@@ -135,6 +132,7 @@ The resize scripts will output images to 800x800.
 This is hard-coded at the moment.
 
 To change this, edit the resize scripts and also provide a pure-white bg img in the **backgrounds** folder.
+
 
 ## Renaming Images
 

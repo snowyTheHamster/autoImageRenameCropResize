@@ -16,10 +16,10 @@ MAX_VAL = 200
 image_exts = [ '.jpg', '.jpeg', '.png', '.tif' ]
 
 #Products Margins within Rectangle
-LEFT = 0
-TOP = 0
-RIGHT = 0
-BOTTOM = 0
+LEFT = 50
+TOP = 650
+RIGHT = 50
+BOTTOM = 650
 
 # Iterate over working directory
 directory = os.path.dirname(os.path.realpath(sys.argv[0]))

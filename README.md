@@ -1,11 +1,16 @@
 # autoImageRenameCropResize
 
-A Python script that detects the edges of an object and replaces the background with pure white.
+Some python scripts that use OpenCV's features automate some photo retouching.
 
-## Setting up
+These scripts will:
 
++ Detects the edges of an object in an image
++ Replaces background with Pure White
++ Crops the images
++ Resizes the images
++ Renames the images
 
-### Create a Project Directory**
+### Create a Project Directory
 ```
 mkdir myprojname
 cd myprojname
@@ -38,75 +43,103 @@ python -m venv .venv
 pip install -r requirements.txt
 ```
 
-## Running the script
+## Setting up
 
 + Ensure folder names and settings are correct in each file
+
+Ensure you have these folders and files:
+
++ 0_input_images (add all your images here)
++ 1_bg_removed   (script that removes bg without clipping highlights but may result in fuzzy edges)
++ 1_bg_removed_b (stript that removes bg with clean edges but prone to clipping highlights)
++ 2_cropped      (crops images from 1_bg_removed)
++ 2_cropped_b    (crops images from 1_bg_removed_b but uses same dimensions as 1_bg_removed)
++ 3_resized800   (resized images in 2_cropped)
++ 3_resized800_b (resized images in 2_cropped_b)
++ 4_renamed      (renames images in 3_resized)
++ 4_renamed_b    (renames images in 3_resized_b)
++ backgrounds
++ list.csv (input your list of filenames here for **rename** scripts to work)
+
+## Running the script
+
+**NOTE:** Detecting white objects against a white background is difficult.
+
+To maximize the success rate, try to **clip out your white background** as bright as possible whilst 
+
+keeping your object's edges as distinct from the background as possible.
+
+---
+
+**NOTE 2:** You may need to play with the parameters in the **removebgA.py** & **removebgB.py** scripts.
+
+Parameters to change in removebgA.py:
+
++ bilateralFilter
++ Canny
++ getStructuringElement
+
+Parameters to change in removebgB.py:
+
++ MIN_VAL
++ bilateralFilter
++ getStructuringElement
 
 Place your images in the **inputimages** folder and run scripts in the following order:
 
 ```
-python 1-removebg.py
-python 1b-removebg.py
-python 2-crop.py
-python 3-resize.py
-python 4-rename.py
+python removebgA.py
+python removebgB.py
+python cropA.py
+python cropB.py
+python resizeA.py
+python resizeB.py
+python renameA.py
+python renameB.py
+```
+
+or run all the scripts at once:
+
+```
+python 0-run.py
 ```
 
 Each script will perform a different task.
 
-This allows you to make adjustments in between in case the results were not perfect.
+This allows you to make manual adjustments in between.
 
 The quality of the output will depend on:
 
 + Quality of the image
-+ Exposure of the background in the image (the brighter the better)
-+ Difference between the object in the image and the background (white products are more difficult). 
++ The background in the image (the brighter and cleaner, the better)
++ Difference between the object and the background (products with fuzzy edges and bright edges are difficult) 
 + Parameter settings in each script.
 
-### 1-removebg.py
+**NOTE:**
 
-This script detects the edges of an object whilst trying to prevent white clipping.
+The **removebgB.py** script produces the best quality results but only when the edges are distinct from background.
 
-There may be some fuzziness around object which will be removed in the next script.
+It is very prone to highlights being clipped.
 
-You will need to adjust the **MIN_VAL** **MAX_VAL** settings.
+That is why I included **removebg.py** which is configured to prevent highlights from clipping, but has fuzzy edges.
 
-The resulting images will generated in a different folder for you to finetune.
+By running both scripts, you will end up with images that are cropped and resized the same; this can allow you to 
 
-An image will not be processed if it already exists in the output folder; so you can re-run the script accordingly.
+stack the images in a photo-editor for easier editing later.
 
-### 1b-removebg.py
 
-This script tries to remove the fuzziness around the object made in the previous script.
+## Resizing Images
 
-The resulting images will generated in a different folder for you to finetune.
+The resize scripts will output images to 800x800.
 
-An image will not be processed if it already exists in the output folder; so you can re-run the script accordingly.
+This is hard-coded at the moment.
 
-### 2-crop.py
+To change this, edit the resize scripts and also provide a pure-white bg img in the **backgrounds** folder.
 
-This script detects the edges of the images again and crops the image.
+## Renaming Images
 
-This step makes it easier to resize the image for the next script.
+You need to provide a list of filenames in the **list.csv** file.
 
-This script will work on the output of the previous step.
+You also need to edit the logic in the rename scripts.
 
-An image will not be processed if it already exists in the output folder; so you can re-run the script accordingly.
-
-### 3-resize.py
-
-This script resizes the images from the previous cropped images.
-
-This script will work on the output of the previous step.
-
-An image will not be processed if it already exists in the output folder; so you can re-run the script accordingly.
-
-### 4-rename.py
-
-This script renames all the images in a folder according to the settings in the script.
-
-You also need to provide a csv file for this script to work.
-
-This script renames **moves** images from previous folder to the next output folder.
-
-Input Folder must ONLY contain images.
+The method used for renaming is basic python string manipulation.

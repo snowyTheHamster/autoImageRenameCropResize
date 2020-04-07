@@ -1,11 +1,6 @@
 .venv/
 .vscode/
-0_input_images/*
-1_bg_removed/*
-1_bg_removed_b/*
-2_cropped/*
-3_resized800/*
-4_renamed/*
+__pycache__/
 testdir/
 *.jpg
 *.jpeg
@@ -15,5 +10,3 @@ testdir/
 
 !backgrounds/*
 !.gitkeep
-
-3_resized800/.gitkeep

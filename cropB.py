@@ -6,8 +6,9 @@ import numpy as np
 
 
 ##Adjust settings below
-INPUT_DIR = '1_bg_removed_b'
-OUTPUT_DIR = '2_cropped'
+REFERENCE_DIR = '1_bg_removed' # Crop using Images here
+INPUT_DIR = '1_bg_removed_b' # Apply crops to images in INPUT_DIR
+OUTPUT_DIR = '2_cropped_b'
 MIN_VAL = 210
 MAX_VAL = 200
 
@@ -21,9 +22,9 @@ BOTTOM = 0
 
 # Iterate over working directory
 directory = os.path.dirname(os.path.realpath(sys.argv[0]))
-for subdir, dirs, files in os.walk(INPUT_DIR):
+for subdir, dirs, files in os.walk(REFERENCE_DIR):
     for filename in files:
-        file_path = os.path.join(INPUT_DIR, filename)
+        file_path = os.path.join(REFERENCE_DIR, filename)
         file_name, file_ext = os.path.splitext(file_path)
         output_file_name = os.path.basename(file_name) + file_ext # save imagename (change ext if you want)
 
@@ -38,7 +39,7 @@ for subdir, dirs, files in os.walk(INPUT_DIR):
             else:
                 print("Processing " + filename + "...")
 
-                image = cv2.imread(INPUT_DIR+'/'+filename)
+                image = cv2.imread(REFERENCE_DIR+'/'+filename)
                 gray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
 
                 ret, thresh = cv2.threshold(gray, MIN_VAL, MAX_VAL, cv2.THRESH_BINARY_INV) # options: THRESH_BINARY,THRESH_BINARY_INV,THRESH_TRUNC,THRESH_TOZERO,THRESH_TOZERO_INV
@@ -65,8 +66,12 @@ for subdir, dirs, files in os.walk(INPUT_DIR):
 
                 # draw the biggest contour (c) in white(255) with 1px border
                 image = cv2.rectangle(image,(x,y),(x+w,y+h),(255, 255, 255), 1)
+                
+                # Select which Images to apply changes to
+                original_image = cv2.imread(INPUT_DIR+'/'+filename) # Apply crops to images in INPUT_DIR
+            
                 # crop the image
-                cropped_image = image[y:y+h, x:x+w]
+                cropped_image = original_image[y:y+h, x:x+w]
 
                 # Save image to output dir
                 cv2.imwrite(OUTPUT_DIR +'/'+ output_file_name, cropped_image)

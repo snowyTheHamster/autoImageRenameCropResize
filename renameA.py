@@ -23,7 +23,7 @@ for row in csv_f: # per each row in csv file
     for y in range(imgno): # repeat below loop x number of times
         y = y + 1 # set as 1 instead of 0
 
-        new_img = f'{row[0]}_{last2digit}_{y}.jpg' # final filename we want
+        new_img = f'AA_{row[0]}_{last2digit}_{y}.jpg' # final filename we want
 
         imgs = sorted(os.listdir(INPUT_DIR)) # gets list of images in a directory (add sorted or it won't work on some workstations)
         img_old_path = os.path.join(INPUT_DIR, imgs[0]) # set fullpath of first image in directory

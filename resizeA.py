@@ -24,15 +24,20 @@ desired_size = (WIDTH - MARGIN_LEFT - MARGIN_RIGHT, HEIGHT - MARGIN_BOTTOM)
 image_exts = [ '.jpg', '.jpeg', '.png', '.tif' ]
 
 # Iterate over working directory
-directory = os.path.dirname(os.path.realpath(sys.argv[0]))
+# directory = os.path.dirname(os.path.realpath(sys.argv[0]))
+count=0
 for subdir, dirs, files in os.walk(INPUT_DIR):
+    file_count = len(files)
     for filename in files:
+        count +=1
         file_path = os.path.join(INPUT_DIR, filename)
         file_name, file_ext = os.path.splitext(file_path)
         output_file_name = os.path.basename(file_name) + file_ext # save imagename (change ext if you want)
 
         if file_ext not in image_exts:
             print("Skipping " + filename + " (not a supported image file)")
+            count -=1
+            file_count -= 1
             continue
 
         else:
@@ -40,7 +45,7 @@ for subdir, dirs, files in os.walk(INPUT_DIR):
                 print(f'{output_file_name} exists; skipping')
                 
             else:
-                print("Processing " + filename + "...")
+                print(f'{count}/{file_count} processing {filename}...')
 
                 i = Image.open(f'./{INPUT_DIR}/{filename}')
                 fn, fext = os.path.splitext(filename)

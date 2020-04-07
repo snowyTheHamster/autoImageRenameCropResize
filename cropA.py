@@ -6,8 +6,9 @@ import numpy as np
 
 
 ##Adjust settings below
-REFERENCE_DIR = '1_bg_removed' # Crop using Images here
-INPUT_DIR = '1_bg_removed' # Apply crops to images in INPUT_DIR
+REFERENCE_DIR = '1_bg_removed_b' # Crop using Images here - change this
+
+INPUT_DIR = '1_bg_removed' # Apply crops to images in INPUT_DIR - don't change this
 OUTPUT_DIR = '2_cropped'
 MIN_VAL = 210
 MAX_VAL = 200
@@ -15,10 +16,10 @@ MAX_VAL = 200
 image_exts = [ '.jpg', '.jpeg', '.png', '.tif' ]
 
 #Products Margins within Rectangle
-LEFT = 0
-TOP = 0
-RIGHT = 0
-BOTTOM = 0
+LEFT = 50
+TOP = 650
+RIGHT = 50
+BOTTOM = 650
 
 # Iterate over working directory
 directory = os.path.dirname(os.path.realpath(sys.argv[0]))

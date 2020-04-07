@@ -118,7 +118,7 @@ The **removebgB.py** script produces the best quality results but only when the 
 
 It produces poor results for light colored objects.
 
-That's why I included **removebg.py** which is configured to minimize highlights from clipping, but results in fuzzy edges.
+That's why I included **removebgA.py** which is configured to minimize highlights from clipping, but results in fuzzy edges.
 
 Run both scripts; you'll end up with 2 sets of results with equal crop/size.
 

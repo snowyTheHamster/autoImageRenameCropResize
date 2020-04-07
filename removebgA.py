@@ -38,7 +38,7 @@ for subdir, dirs, files in os.walk(INPUT_DIR):
                 #PLAN B: Canny
                 thresh = cv2.Canny(blurred, 2, 6)
 
-                kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (21, 21)) # options: MORPH_RECT,MORPH_ELLIPSE; Also tweak last parameter(x, x)
+                kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (77, 77)) # options: MORPH_RECT,MORPH_ELLIPSE; Also tweak last parameter(x, x)
                 morphchoice = cv2.morphologyEx(thresh, cv2.MORPH_DILATE, kernel) # options: MORPH_CLOSE,MORPH_OPEN,MORPH_DILATE,MORPH_ERODE
                 (cnts, _) = cv2.findContours(morphchoice.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE) # finding_contours
                 

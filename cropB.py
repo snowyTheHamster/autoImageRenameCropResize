@@ -6,8 +6,9 @@ import numpy as np
 
 
 ##Adjust settings below
-REFERENCE_DIR = '1_bg_removed' # Crop using Images here
-INPUT_DIR = '1_bg_removed_b' # Apply crops to images in INPUT_DIR
+REFERENCE_DIR = '1_bg_removed_b' # Crop using Images here - change this
+
+INPUT_DIR = '1_bg_removed_b' # Apply crops to images in INPUT_DIR - don't change this
 OUTPUT_DIR = '2_cropped_b'
 MIN_VAL = 210
 MAX_VAL = 200

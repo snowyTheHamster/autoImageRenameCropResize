@@ -50,8 +50,8 @@ pip install -r requirements.txt
 Explanation of each folder and file:
 
 + 0_input_images (add all your images here)
-+ 1_bg_removed   (outputs bg-removed imgs using threshold)
-+ 1_bg_removed_b (outputs bg-removed imgs using canny algorithm)
++ 1_bg_removed   (outputs bg-removed imgs using canny algorithm)
++ 1_bg_removed_b (outputs bg-removed imgs using threshold)
 + 2_cropped      (cropped imgs saved here)
 + 2_cropped_b    (cropped imgs saved here)
 + 3_resized800   (resized imgs saved here)

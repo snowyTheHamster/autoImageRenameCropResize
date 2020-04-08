@@ -58,7 +58,6 @@ Explanation of each folder and file:
 + 3_resized800_b (resized imgs saved here)
 + 4_renamed      (renamed imgs saved here)
 + 4_renamed_b    (renamed imgs saved here)
-+ backgrounds
 + list.csv (list your filenames here for **rename** scripts to work)
 
 ## Running the script
@@ -127,11 +126,15 @@ Stack these images in a photo-editor for finetuning.
 
 ## Resizing Images
 
-The resize scripts will output images to 800x800.
+The resize scripts will output images to set height, width & background color.
 
-This is hard-coded at the moment.
+The script was originally designed to export to 800x800; any sizes bigger than this is ok.
 
-To change this, edit the resize scripts and also provide a pure-white bg img in the **backgrounds** folder.
+Outputs smaller than 800x800 will throw error; adjust settings or just create another script to 
+
+resize image.
+
+Adjust margins accordingly based on your output's aspect ratio.
 
 
 ## Renaming Images

@@ -7,8 +7,7 @@ import numpy as np
 
 ##Adjust settings below
 INPUT_DIR = '2_cropped_b'
-OUTPUT_DIR = '3_resized800_b'
-BG_DIR = 'backgrounds'
+OUTPUT_DIR = '3_resized_b'
 
 #Final image dimensions:
 WIDTH = 800
@@ -53,7 +52,7 @@ for subdir, dirs, files in os.walk(INPUT_DIR):
                 ratio = min([float(desired_size[0])/old_size[0], float(desired_size[1])/old_size[1]])
                 new_size = tuple([int(x*ratio) for x in old_size])
                 im = i.resize(new_size, Image.ANTIALIAS)
-                new_im = Image.open(f'{BG_DIR}/bg-fff-800x800.jpg')
+                new_im = Image.new('RGB', size = (WIDTH, HEIGHT), color = (255, 255, 255)) #generate bg image
                 new_im.paste(im, ((WIDTH - new_size[0]) // 2, HEIGHT - new_size[1] - MARGIN_BOTTOM))
 
                 # Create output directory if it don't exist

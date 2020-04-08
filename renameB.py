@@ -9,7 +9,7 @@ import csv
 locacsv = "list.csv" #csv file name
 imgno = 3 # No. of images per model
 
-INPUT_DIR = '3_resized800_b'
+INPUT_DIR = '3_resized_b'
 OUTPUT_DIR = '4_renamed_b'
 
 

@@ -22,7 +22,7 @@ def folder_init():
     except:
         print('directory already exists')
 
-def touchitup():
+def touchitup(mode="live"):
     # bg removal 1 variables
     FILL_COLOR = [255, 255, 255] # any BGR color value to fill with
     MASK_VALUE = 255 # 1 channel white (can be any non-zero uint8 value)
@@ -106,7 +106,11 @@ def touchitup():
                     cv2.imwrite(BG_REMOVED_DIR +'/'+ output_file_name, image2)
                     print(f'done bg removal for {output_file_name}')
 
-def cropitup():
+                    print(f'mode is: {mode}')
+                    if mode == 'test':
+                        break
+
+def cropitup(mode="live"):
     REFERENCE_DIR = BG_REMOVED_DIR
 
     folders_to_crop = [INPUT_DIR, REFERENCE_DIR]
@@ -173,8 +177,12 @@ def cropitup():
                 cv2.imwrite(crop_save +'/'+ output_file_name, cropped_image)
                 print(f'done cropping for {output_file_name}')
 
+                print(f'mode is: {mode}')
+                if mode == 'test':
+                    break
 
-def resizeitup():
+
+def resizeitup(mode="live"):
     #Final Image Paddings:
     MARGIN_LEFT = 30
     MARGIN_RIGHT = 30
@@ -209,11 +217,18 @@ def resizeitup():
                 print("Saving " + filename + " to " + resize_save + " folder")
                 new_im.save(f'{resize_save}/{fn}{fext}')
 
+                print(f'mode is: {mode}')
+                if mode == 'test':
+                    break
 
-def renameitup():
+
+def renameitup(mode="live"):
 
     folders_to_rename = [RESIZED_DIR_KAGE, RESIZED_DIR]
     renamed_save_folders = [RENAMED_DIR_KAGE, RENAMED_DIR]
+    
+    if mode == 'test':
+        no_of_imgs = 1
 
     for INPUT_DIR, OUTPUT_DIR in zip(folders_to_rename, renamed_save_folders):
         f = open(csvfile)
@@ -231,6 +246,10 @@ def renameitup():
 
                 print(f'moving filename: {img_old_path}')
                 shutil.move(img_old_path, img_new_path) # moves image and renames it in new target directory
+
+            print(f'mode is: {mode}')
+            if mode == 'test':
+                break
 
 
 def cleanitup():
@@ -258,8 +277,9 @@ layout = [
     [sg.Text('New Height:'), sg.InputText(key='_NEW_HEIGHT_', size=(5,1)), sg.Text('px')],
     [sg.Text('csv with 1 filename/line:'), sg.Input(key='_RENAME_CSV_'), sg.FileBrowse()],
     [sg.Text('No. per Image:'), sg.InputText(key='_IMG_ANGLES_', size=(5,1))],
+    [sg.Button("Test", size=(10, 1), key='_TEST_')],
     [sg.Button("Process", size=(10, 1), bind_return_key=True, key='_PROCESS_')],
-    [sg.Output(size=(60,10))],
+    # [sg.Output(size=(60,10))],
 ]
 
 window: object = sg.Window('Product Photo Auto Retouch (jpg)', layout, element_justification='left')
@@ -268,8 +288,7 @@ while True:
     event, values = window.read()
     if event is None:
         break
-    if event == '_PROCESS_':
-
+    if event == '_PROCESS_' or event == '_TEST_':
         INPUT_DIR = values['_IN_IMG_']
         OUTPUT_DIR = values['_OUT_IMG_']
         BG_REMOVED_DIR = os.path.join(OUTPUT_DIR, '0_bg_removed')
@@ -297,6 +316,13 @@ while True:
             print('must speficy csv file with desired filename per line')
         elif no_of_imgs == '':
             print('must speficy no. of angles per image')
+        elif event == '_TEST_':
+            folder_init()
+            touchitup("test")
+            cropitup("test")
+            resizeitup("test")
+            renameitup("test")
+            cleanitup()
         else:
             folder_init()
             touchitup()

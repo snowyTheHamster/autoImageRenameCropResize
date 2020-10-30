@@ -104,9 +104,7 @@ def touchitup(mode="live"):
 
                     # Save image to output dir
                     cv2.imwrite(BG_REMOVED_DIR +'/'+ output_file_name, image2)
-                    print(f'done bg removal for {output_file_name}')
 
-                    print(f'mode is: {mode}')
                     if mode == 'test':
                         break
 
@@ -120,10 +118,10 @@ def cropitup(mode="live"):
     MAX_VAL = 200
 
     #Products Margins within Rectangle
-    LEFT = 50
-    TOP = 650
-    RIGHT = 50
-    BOTTOM = 650
+    LEFT = 50 + MLEFT
+    TOP = 650 + MTOP
+    RIGHT = 50 + MRIGHT
+    BOTTOM = 650 + MBOTTOM
 
     # Iterate over working directory
     # directory = os.path.dirname(os.path.realpath(sys.argv[0]))
@@ -175,9 +173,7 @@ def cropitup(mode="live"):
 
                 # Save image to output dir
                 cv2.imwrite(crop_save +'/'+ output_file_name, cropped_image)
-                print(f'done cropping for {output_file_name}')
 
-                print(f'mode is: {mode}')
                 if mode == 'test':
                     break
 
@@ -214,10 +210,8 @@ def resizeitup(mode="live"):
                 new_im = Image.new('RGB', size = (WIDTH, HEIGHT), color = (255, 255, 255)) #generate bg image
                 new_im.paste(im, ((WIDTH - new_size[0]) // 2, HEIGHT - new_size[1] - MARGIN_BOTTOM))
 
-                print("Saving " + filename + " to " + resize_save + " folder")
                 new_im.save(f'{resize_save}/{fn}{fext}')
 
-                print(f'mode is: {mode}')
                 if mode == 'test':
                     break
 
@@ -226,9 +220,11 @@ def renameitup(mode="live"):
 
     folders_to_rename = [RESIZED_DIR_KAGE, RESIZED_DIR]
     renamed_save_folders = [RENAMED_DIR_KAGE, RENAMED_DIR]
-    
+
     if mode == 'test':
         no_of_imgs = 1
+    elif mode =='live':
+        no_of_imgs = int(values['_IMG_ANGLES_'])
 
     for INPUT_DIR, OUTPUT_DIR in zip(folders_to_rename, renamed_save_folders):
         f = open(csvfile)
@@ -244,10 +240,9 @@ def renameitup(mode="live"):
                 img_old_path = os.path.join(INPUT_DIR, imgs[0]) # set fullpath of first image in directory
                 img_new_path = os.path.join(OUTPUT_DIR, new_img) # set fullpath of image in target directory
 
-                print(f'moving filename: {img_old_path}')
+                print(f'rename and move file to: {img_new_path}')
                 shutil.move(img_old_path, img_new_path) # moves image and renames it in new target directory
 
-            print(f'mode is: {mode}')
             if mode == 'test':
                 break
 
@@ -267,19 +262,24 @@ def cleanitup():
 
 
 layout = [
-    [sg.Text('Select Folder with Images')],
-    [sg.Text('')],
     [sg.Text('Input folder:')],
     [sg.Input(key='_IN_IMG_'), sg.FolderBrowse()],
     [sg.Text('Output folder:')],
     [sg.Input(key='_OUT_IMG_'), sg.FolderBrowse()],
-    [sg.Text('New Width:'), sg.InputText(key='_NEW_WIDTH_', size=(5,1)), sg.Text('px')],
-    [sg.Text('New Height:'), sg.InputText(key='_NEW_HEIGHT_', size=(5,1)), sg.Text('px')],
+    [sg.Text('')],
+    [sg.Text('--- RESIZE FUNCTION ---')],
+    [sg.Text('New Width (px):'), sg.InputText(key='_NEW_WIDTH_', size=(5,1))],
+    [sg.Text('New Height (px):'), sg.InputText(key='_NEW_HEIGHT_', size=(5,1))],
+    [sg.Text('')],
+    [sg.Text('--- RENAME FUNCTION--- ')],
     [sg.Text('csv with 1 filename/line:'), sg.Input(key='_RENAME_CSV_'), sg.FileBrowse()],
     [sg.Text('No. per Image:'), sg.InputText(key='_IMG_ANGLES_', size=(5,1))],
+    [sg.Text('')],
+    [sg.Text('Additional Margins (px)')],
+    [sg.Text('Top:'), sg.InputText(0, key='_MARGIN_TOP_', size=(5,1)), sg.Text('Right:'), sg.InputText(0, key='_MARGIN_RIGHT_', size=(5,1)), sg.Text('Bottom:'), sg.InputText(600, key='_MARGIN_BOTTOM_', size=(5,1)), sg.Text('Left:'), sg.InputText(0, key='_MARGIN_LEFT_', size=(5,1))],
     [sg.Button("Test", size=(10, 1), key='_TEST_')],
     [sg.Button("Process", size=(10, 1), bind_return_key=True, key='_PROCESS_')],
-    # [sg.Output(size=(60,10))],
+    [sg.Output(size=(60, 10))],
 ]
 
 window: object = sg.Window('Product Photo Auto Retouch (jpg)', layout, element_justification='left')
@@ -302,11 +302,16 @@ while True:
         WIDTH = int(values['_NEW_WIDTH_'])
         HEIGHT = int(values['_NEW_HEIGHT_'])
 
+        MTOP = int(values['_MARGIN_TOP_'])
+        MRIGHT = int(values['_MARGIN_RIGHT_'])
+        MBOTTOM = int(values['_MARGIN_BOTTOM_'])
+        MLEFT = int(values['_MARGIN_LEFT_'])
+
         csvfile = values['_RENAME_CSV_']
         no_of_imgs = int(values['_IMG_ANGLES_'])
 
 
-        if INPUT_DIR == '' or OUTPUT_DIR == '' or values['_NEW_WIDTH_'] == '' or values['_NEW_HEIGHT_'] == '' :
+        if INPUT_DIR == '' or OUTPUT_DIR == '' or values['_NEW_WIDTH_'] == '' or values['_NEW_HEIGHT_'] == '' or values['_MARGIN_TOP_'] == '' or values['_MARGIN_RIGHT_'] == '' or values['_MARGIN_BOTTOM_'] == '' or values['_MARGIN_LEFT_'] == '' :
             print('please specify folders and input valid width & height')
         elif INPUT_DIR == OUTPUT_DIR:
             print('Output Folder cannot be same as the Input Folder')

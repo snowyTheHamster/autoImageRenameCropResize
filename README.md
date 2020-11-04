@@ -45,6 +45,8 @@ pip install -r requirements.txt
 
 ## Setting up
 
+just run gui.py and skip everything below :)
+
 + Ensure folder names and settings are correct in each file.
 
 Explanation of each folder and file:

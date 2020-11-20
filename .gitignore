@@ -1,6 +1,9 @@
 .venv/
 .vscode/
 __pycache__/
+dist/
+build/
+*.spec
 testdir/
 *.jpg
 *.jpeg

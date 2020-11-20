@@ -120,7 +120,7 @@ def cropitup(mode="live"):
 
     #Products Margins within Rectangle
     LEFT = 0 + MLEFT
-    TOP = 0
+    TOP = 200 + MTOP
     RIGHT = 0 + MRIGHT
     BOTTOM = 220
 
@@ -186,7 +186,7 @@ def resizeitup(mode="live"):
     # MARGIN_BOTTOM = 26
     MARGIN_LEFT = 20
     MARGIN_RIGHT = 20
-    MARGIN_BOTTOM = 176 + MBOTTOM
+    MARGIN_BOTTOM = 276 + MBOTTOM
 
     desired_size = (WIDTH - MARGIN_LEFT - MARGIN_RIGHT, HEIGHT - MARGIN_BOTTOM)
 

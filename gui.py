@@ -1,3 +1,4 @@
+import traceback
 import os
 import cv2
 from PIL import Image
@@ -118,10 +119,10 @@ def cropitup(mode="live"):
     MAX_VAL = 200
 
     #Products Margins within Rectangle
-    LEFT = 50 + MLEFT
-    TOP = 650 + MTOP
-    RIGHT = 50 + MRIGHT
-    BOTTOM = 650 + MBOTTOM
+    LEFT = 0 + MLEFT
+    TOP = 0
+    RIGHT = 0 + MRIGHT
+    BOTTOM = 220
 
     # Iterate over working directory
     # directory = os.path.dirname(os.path.realpath(sys.argv[0]))
@@ -180,9 +181,12 @@ def cropitup(mode="live"):
 
 def resizeitup(mode="live"):
     #Final Image Paddings:
-    MARGIN_LEFT = 30
-    MARGIN_RIGHT = 30
-    MARGIN_BOTTOM = 26
+    # MARGIN_LEFT = 30
+    # MARGIN_RIGHT = 30
+    # MARGIN_BOTTOM = 26
+    MARGIN_LEFT = 20
+    MARGIN_RIGHT = 20
+    MARGIN_BOTTOM = 176 + MBOTTOM
 
     desired_size = (WIDTH - MARGIN_LEFT - MARGIN_RIGHT, HEIGHT - MARGIN_BOTTOM)
 
@@ -268,15 +272,15 @@ layout = [
     [sg.Input(key='_OUT_IMG_'), sg.FolderBrowse()],
     [sg.Text('')],
     [sg.Text('--- RESIZE FUNCTION ---')],
-    [sg.Text('New Width (px):'), sg.InputText(key='_NEW_WIDTH_', size=(5,1))],
-    [sg.Text('New Height (px):'), sg.InputText(key='_NEW_HEIGHT_', size=(5,1))],
+    [sg.Text('New Width (px):'), sg.InputText(1000, key='_NEW_WIDTH_', size=(5,1))],
+    [sg.Text('New Height (px):'), sg.InputText(1000, key='_NEW_HEIGHT_', size=(5,1))],
     [sg.Text('')],
     [sg.Text('--- RENAME FUNCTION--- ')],
     [sg.Text('csv with 1 filename/line:'), sg.Input(key='_RENAME_CSV_'), sg.FileBrowse()],
     [sg.Text('No. per Image:'), sg.InputText(key='_IMG_ANGLES_', size=(5,1))],
     [sg.Text('')],
     [sg.Text('Additional Margins (px)')],
-    [sg.Text('Top:'), sg.InputText(0, key='_MARGIN_TOP_', size=(5,1)), sg.Text('Right:'), sg.InputText(0, key='_MARGIN_RIGHT_', size=(5,1)), sg.Text('Bottom:'), sg.InputText(600, key='_MARGIN_BOTTOM_', size=(5,1)), sg.Text('Left:'), sg.InputText(0, key='_MARGIN_LEFT_', size=(5,1))],
+    [sg.Text('Top:'), sg.InputText(0, key='_MARGIN_TOP_', size=(5,1)), sg.Text('Right:'), sg.InputText(0, key='_MARGIN_RIGHT_', size=(5,1)), sg.Text('Bottom:'), sg.InputText(0, key='_MARGIN_BOTTOM_', size=(5,1)), sg.Text('Left:'), sg.InputText(0, key='_MARGIN_LEFT_', size=(5,1))],
     [sg.Button("Test", size=(10, 1), key='_TEST_')],
     [sg.Button("Process", size=(10, 1), bind_return_key=True, key='_PROCESS_')],
     [sg.Output(size=(60, 10))],
@@ -284,54 +288,60 @@ layout = [
 
 window: object = sg.Window('Product Photo Auto Retouch (jpg)', layout, element_justification='left')
 
-while True:
-    event, values = window.read()
-    if event is None:
-        break
-    if event == '_PROCESS_' or event == '_TEST_':
-        INPUT_DIR = values['_IN_IMG_']
-        OUTPUT_DIR = values['_OUT_IMG_']
-        BG_REMOVED_DIR = os.path.join(OUTPUT_DIR, '0_bg_removed')
-        CROPPED_DIR = os.path.join(OUTPUT_DIR, '1_cropped')
-        CROPPED_DIR_KAGE = os.path.join(OUTPUT_DIR, '1_cropped_kage')
-        RESIZED_DIR = os.path.join(OUTPUT_DIR, '2_resized')
-        RESIZED_DIR_KAGE = os.path.join(OUTPUT_DIR, '2_resized_kage')
-        RENAMED_DIR = os.path.join(OUTPUT_DIR, 'output')
-        RENAMED_DIR_KAGE = os.path.join(OUTPUT_DIR, 'output_helper')
+try:
+    while True:
+        event, values = window.read()
+        if event is None:
+            break
+        if event == '_PROCESS_' or event == '_TEST_':
+            INPUT_DIR = values['_IN_IMG_']
+            OUTPUT_DIR = values['_OUT_IMG_']
+            BG_REMOVED_DIR = os.path.join(OUTPUT_DIR, '0_bg_removed')
+            CROPPED_DIR = os.path.join(OUTPUT_DIR, '1_cropped')
+            CROPPED_DIR_KAGE = os.path.join(OUTPUT_DIR, '1_cropped_kage')
+            RESIZED_DIR = os.path.join(OUTPUT_DIR, '2_resized')
+            RESIZED_DIR_KAGE = os.path.join(OUTPUT_DIR, '2_resized_kage')
+            RENAMED_DIR = os.path.join(OUTPUT_DIR, 'output')
+            RENAMED_DIR_KAGE = os.path.join(OUTPUT_DIR, 'output_helper')
 
-        WIDTH = int(values['_NEW_WIDTH_'])
-        HEIGHT = int(values['_NEW_HEIGHT_'])
+            WIDTH = int(values['_NEW_WIDTH_'])
+            HEIGHT = int(values['_NEW_HEIGHT_'])
 
-        MTOP = int(values['_MARGIN_TOP_'])
-        MRIGHT = int(values['_MARGIN_RIGHT_'])
-        MBOTTOM = int(values['_MARGIN_BOTTOM_'])
-        MLEFT = int(values['_MARGIN_LEFT_'])
+            MTOP = int(values['_MARGIN_TOP_'])
+            MRIGHT = int(values['_MARGIN_RIGHT_'])
+            MBOTTOM = int(values['_MARGIN_BOTTOM_'])
+            MLEFT = int(values['_MARGIN_LEFT_'])
 
-        csvfile = values['_RENAME_CSV_']
-        no_of_imgs = int(values['_IMG_ANGLES_'])
+            csvfile = values['_RENAME_CSV_']
+            no_of_imgs = int(values['_IMG_ANGLES_'])
 
 
-        if INPUT_DIR == '' or OUTPUT_DIR == '' or values['_NEW_WIDTH_'] == '' or values['_NEW_HEIGHT_'] == '' or values['_MARGIN_TOP_'] == '' or values['_MARGIN_RIGHT_'] == '' or values['_MARGIN_BOTTOM_'] == '' or values['_MARGIN_LEFT_'] == '' :
-            print('please specify folders and input valid width & height')
-        elif INPUT_DIR == OUTPUT_DIR:
-            print('Output Folder cannot be same as the Input Folder')
-        elif os.listdir(OUTPUT_DIR) :
-            print('Output Folder must be Empty')
-        elif csvfile == '':
-            print('must speficy csv file with desired filename per line')
-        elif no_of_imgs == '':
-            print('must speficy no. of angles per image')
-        elif event == '_TEST_':
-            folder_init()
-            touchitup("test")
-            cropitup("test")
-            resizeitup("test")
-            renameitup("test")
-            cleanitup()
-        else:
-            folder_init()
-            touchitup()
-            cropitup()
-            resizeitup()
-            renameitup()
-            cleanitup()
+            if INPUT_DIR == '' or OUTPUT_DIR == '' or values['_NEW_WIDTH_'] == '' or values['_NEW_HEIGHT_'] == '' or values['_MARGIN_TOP_'] == '' or values['_MARGIN_RIGHT_'] == '' or values['_MARGIN_BOTTOM_'] == '' or values['_MARGIN_LEFT_'] == '' :
+                print('please specify folders and input valid width & height')
+            elif INPUT_DIR == OUTPUT_DIR:
+                print('Output Folder cannot be same as the Input Folder')
+            elif os.listdir(OUTPUT_DIR) :
+                print('Output Folder must be Empty')
+            elif csvfile == '':
+                print('must speficy csv file with desired filename per line')
+            elif no_of_imgs == '':
+                print('must speficy no. of angles per image')
+            elif event == '_TEST_':
+                folder_init()
+                touchitup("test")
+                cropitup("test")
+                resizeitup("test")
+                renameitup("test")
+                cleanitup()
+            else:
+                folder_init()
+                touchitup()
+                cropitup()
+                resizeitup()
+                renameitup()
+                cleanitup()
+
+except Exception as e:
+    tb = traceback.format_exc()
+    sg.Print(f'An error happened.  Here is the info:', e, tb)
+    sg.popup_error(f'AN EXCEPTION OCCURRED!', e, tb)

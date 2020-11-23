@@ -318,7 +318,7 @@ try:
 
             if INPUT_DIR == '' or OUTPUT_DIR == '' or values['_NEW_WIDTH_'] == '' or values['_NEW_HEIGHT_'] == '' or values['_MARGIN_TOP_'] == '' or values['_MARGIN_RIGHT_'] == '' or values['_MARGIN_BOTTOM_'] == '' or values['_MARGIN_LEFT_'] == '' :
                 print('please specify folders and input valid width & height')
-            elif INPUT_DIR == OUTPUT_DIR:
+            elif OUTPUT_DIR == INPUT_DIR:
                 print('Output Folder cannot be same as the Input Folder')
             elif os.listdir(OUTPUT_DIR) :
                 print('Output Folder must be Empty')

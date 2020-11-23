@@ -7,14 +7,7 @@ import PySimpleGUI as sg
 
 image_exts = [ '.jpg', '.jpeg' ]
 
-def folder_init():
-    # create output folder
-    try:
-        os.mkdir(BG_REMOVED_DIR)
-    except:
-        print('directory already exists')
-
-def removebg(mode="live"):
+def removebg():
 
     count = 0
 
@@ -33,7 +26,7 @@ def removebg(mode="live"):
                 continue
 
             else:
-                if os.path.isfile(BG_REMOVED_DIR +'/'+ output_file_name):
+                if os.path.isfile(OUTPUT_DIR +'/'+ output_file_name):
                     print(f'{output_file_name} exists; skipping')
                 else:
                     print(f'{count}/{file_count} Removing BG from {filename}...')
@@ -89,7 +82,7 @@ def removebg(mode="live"):
                     image2[sel] = FILL_COLOR # and fill it with FILL_COLOR
 
                     # Save image to output dir
-                    cv2.imwrite(BG_REMOVED_DIR +'/'+ output_file_name, image2)
+                    cv2.imwrite(OUTPUT_DIR +'/'+ output_file_name, image2)
         print('done.')
 
 
@@ -128,16 +121,14 @@ try:
             FILL_2 = int(values['_FILL_VALUE2_'])
             FILL_3 = int(values['_FILL_VALUE3_'])
             FILL_COLOR = [FILL_1, FILL_2, FILL_3]
-            BG_REMOVED_DIR = os.path.join(OUTPUT_DIR, '1_bg_removed')
 
             if INPUT_DIR == '' or OUTPUT_DIR == '' :
-                print('please specify folders and threshold values')
-            elif INPUT_DIR == OUTPUT_DIR:
+                print('please specify folders')
+            elif OUTPUT_DIR == INPUT_DIR:
                 print('Output Folder cannot be same as the Input Folder')
             elif os.listdir(OUTPUT_DIR) :
                 print('Output Folder must be Empty')
             else:
-                folder_init()
                 removebg()
 
 except Exception as e:

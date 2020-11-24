@@ -13,3 +13,4 @@ testdir/
 
 !backgrounds/*
 !.gitkeep
+!sample_images/*.jpg

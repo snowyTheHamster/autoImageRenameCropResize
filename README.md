@@ -2,13 +2,12 @@
 
 Some python scripts that use OpenCV's features automate some photo retouching.
 
-These scripts will:
+These scripts will in bulk:
 
-+ Detects the edges of an object in an image
-+ Replaces background with Pure White
-+ Crops the images
-+ Resizes the images
-+ Renames the images
+1. Detects largest object in the images and removes the background.
+1. Detects the edges of object and crops the images.
+1. Resizes images to desired size.
+1. Renames images by supplying a csv with a list of names.
 
 ### Create a Project Directory
 ```
@@ -40,29 +39,17 @@ python -m venv .venv
 
 ### Install the modules from the provided req file
 ```
+python -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-## Setting up
+## Running 1removeby.py
 
-just run gui.py and skip everything below :)
+1. prepare folder with images you want to process
+1. create a folder to output the results
+1. You can set the new background color by adjusting the rgb sliders.
 
-+ Ensure folder names and settings are correct in each file.
-
-Explanation of each folder and file:
-
-+ 0_input_images (add all your images here)
-+ 1_bg_removed   (outputs bg-removed imgs using canny algorithm)
-+ 1_bg_removed_b (outputs bg-removed imgs using threshold)
-+ 2_cropped      (cropped imgs saved here)
-+ 2_cropped_b    (cropped imgs saved here)
-+ 3_resized800   (resized imgs saved here)
-+ 3_resized800_b (resized imgs saved here)
-+ 4_renamed      (renamed imgs saved here)
-+ 4_renamed_b    (renamed imgs saved here)
-+ list.csv (list your filenames here for **rename** scripts to work)
-
-## Running the script
+`python 1removebg.py`
 
 **NOTE:** Detecting white objects against a white background is difficult.
 
@@ -72,77 +59,68 @@ Keep your object's edges as distinct from the background as possible.
 
 ---
 
-**NOTE 2:** You may need to play with the parameters in the **removebgA.py** & **removebgB.py** scripts.
+**NOTE 2:** You can change the parameters if the defaults don't yield good results.
 
-Parameters to change in removebgA.py:
+## Running 2cropimg.py
 
-+ bilateralFilter
-+ Canny
-+ getStructuringElement
+1. prepare folder with images (backgrounds removed)
+1. prepare optional folder with images (without the backgrounds removed)
+1. create a folder to output the results
 
-Parameters to change in removebgB.py:
-
-+ MIN_VAL
-+ bilateralFilter
-+ getStructuringElement
-
-Place your images in the **inputimages** folder and run scripts in the following order:
-
-```
-python removebgA.py
-python removebgB.py
-python cropA.py
-python cropB.py
-python resizeA.py
-python resizeB.py
-python renameA.py
-python renameB.py
-```
-
-or run all the scripts at once:
-
-```
-python 0-run.py
-```
-
-Each script will perform one task.
-
-The results from each task is saved in a unique folder.
-
-This allows you to make manual adjustments in between.
-
-The quality of the output will depend on:
-
-**NOTE:**
-
-The **removebgB.py** script produces the best quality results but only when the edges are distinct from background.
-
-It produces poor results for light colored objects.
-
-That's why I included **removebgA.py** which is configured to minimize highlights from clipping, but results in fuzzy edges.
-
-Run both scripts; you'll end up with 2 sets of results with equal crop/size.
-
-Stack these images in a photo-editor for finetuning.
+`python 2cropimg.py`
 
 
-## Resizing Images
+This script will detect the edges of the object in the images and crop around the edges.
 
-The resize scripts will output images to set height, width & background color.
+You can add extra paddings by changing the settings.
 
-The script was originally designed to export to 800x800; any sizes bigger than this is ok.
+## Running 3resizeimg.py
 
-Outputs smaller than 800x800 will throw error; adjust settings or just create another script to 
+1. prepare folder with images
+1. create a folder to output the results
+1. set desired width & height of new images
+1. Padding Sides will distribute paddings horizontally (e.g. 40px means 20px on left & right)
+1. Padding Bottom adds padding to bottom of the images.
 
-resize image.
+`python 3resizeimg.py`
 
-Adjust margins accordingly based on your output's aspect ratio.
+This script essentially creates a new image (white background) in the desired size and pastes the original image into it.
 
 
-## Renaming Images
+## Running 4renamefiles.py
 
-You need to provide a list of filenames in the **list.csv** file.
+1. prepare folder with images
+1. create a folder to output the results
+1. prepare csv file with one filename per line (no headers, first column only)
+1. Input **no. per file**. If you have several angles of same product photo (for example 3 angles per product, type in 3).
 
-You also need to edit the logic in the rename scripts.
+This script does not alter the **input folder** so you can experiment with it.
 
-The method used for renaming is basic python string manipulation.
+`python 4renamefiles.py`
+
+**Note**
+
+- The number of images in input folder must match the rows of filenames in the csv file.
+- If you have multiple angles of product images, they all they to be the same (e.g. if product shots have 3 angles, they all have to have 3 angles).
+
+**Scenario 1**
+
+60 images, 1 angle(s) per image, set **no. per file** to **1** -> csvfile will contain 60 rows of filename.
+
+output will be: row1name_1.jpg, row2name_1.jpg, row3name_1.jpg, row4name_1.jpg etc..
+
+**Scenario 1**
+
+60 images, 2 angle(s) per image, set **no. per file** to **2** -> csvfile will contain 30 rows of filename.
+
+output will be: row1name_1.jpg, row1name_2.jpg, row2name_1.jpg, row2name_2.jpg etc..
+
+**Note 2**
+
+Rename function will work on files with any filetype, not just jpgs.
+
+## Samples
+
+You can test the script with the sample images included in the **sample_images** folder.
+
+These images are significantly downsized so the results are poor, but should give you an idea of what type of photos work.

@@ -1,6 +1,6 @@
 # autoImageRenameCropResize
 
-Some python scripts that use OpenCV's features automate some photo retouching.
+Automate image processing using python and OpenCV
 
 These scripts will in bulk:
 
@@ -9,10 +9,15 @@ These scripts will in bulk:
 1. Resizes images to desired size.
 1. Renames images by supplying a csv with a list of names.
 
+Run each of these scripts to launch a gui app.
+
+You can also use the .ipynb notebooks on Google Colabs.
+
+
 ### Create a Project Directory
 ```
-mkdir myprojname
-cd myprojname
+mkdir myprojectname
+cd myprojectname
 ```
 
 ### Clone the Repo

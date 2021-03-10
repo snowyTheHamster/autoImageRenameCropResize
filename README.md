@@ -1,6 +1,6 @@
 # autoImageRenameCropResize
 
-Automate image processing using python and OpenCV
+Automate image processing using python and OpenCV.
 
 These scripts will in bulk:
 
@@ -11,7 +11,7 @@ These scripts will in bulk:
 
 Run each of these scripts to launch a gui app.
 
-You can also use the .ipynb notebooks on Google Colabs.
+You can also run the .ipynb versions on Google Colabs.
 
 
 ### Create a Project Directory
@@ -33,13 +33,11 @@ python -m venv .venv
 **Active the virtual Env in Mac and Linux:**
 ```
 . .venv/bin/activate
-
 ```
 
 **Active the virtual Env in Windows:**
 ```
 . .venv/script/activate
-
 ```
 
 ### Install the modules from the provided req file
@@ -54,7 +52,9 @@ pip install -r requirements.txt
 1. create a folder to output the results
 1. You can set the new background color by adjusting the rgb sliders.
 
-`python 1removebg.py`
+```
+python 1removebg.py
+```
 
 **NOTE:** Detecting white objects against a white background is difficult.
 
@@ -72,8 +72,9 @@ Keep your object's edges as distinct from the background as possible.
 1. prepare optional folder with images (without the backgrounds removed)
 1. create a folder to output the results
 
-`python 2cropimg.py`
-
+```
+python 2cropimg.py
+```
 
 This script will detect the edges of the object in the images and crop around the edges.
 
@@ -87,7 +88,9 @@ You can add extra paddings by changing the settings.
 1. Padding Sides will distribute paddings horizontally (e.g. 40px means 20px on left & right)
 1. Padding Bottom adds padding to bottom of the images.
 
-`python 3resizeimg.py`
+```
+python 3resizeimg.py
+```
 
 This script essentially creates a new image (white background) in the desired size and pastes the original image into it.
 
@@ -101,7 +104,9 @@ This script essentially creates a new image (white background) in the desired si
 
 This script does not alter the **input folder** so you can experiment with it.
 
-`python 4renamefiles.py`
+```
+python 4renamefiles.py
+```
 
 **Note**
 
@@ -122,10 +127,4 @@ output will be: row1name_1.jpg, row1name_2.jpg, row2name_1.jpg, row2name_2.jpg e
 
 **Note 2**
 
-Rename function will work on files with any filetype, not just jpgs.
-
-## Samples
-
-You can test the script with the sample images included in the **sample_images** folder.
-
-These images are significantly downsized so the results are poor, but should give you an idea of what type of photos work.
+These scripts won't affect the original images but you should still make back ups.

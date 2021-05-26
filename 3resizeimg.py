@@ -30,7 +30,8 @@ def resizeitup():
                 ratio = min([float(desired_size[0])/old_size[0], float(desired_size[1])/old_size[1]])
                 new_size = tuple([int(x*ratio) for x in old_size])
                 im = i.resize(new_size, Image.ANTIALIAS)
-                new_im = Image.new('RGB', size = (WIDTH, HEIGHT), color = (255, 255, 255)) #generate bg image
+                new_im = Image.new('RGB', size = (WIDTH, HEIGHT), color = (255, 255, 255)) #generate bg image (for jpg)
+                # new_im = Image.new('RGBA', size = (WIDTH, HEIGHT), color = ("WHITE")) #generate bg image (for PNG)
                 new_im.paste(im, ((WIDTH - new_size[0]) // 2, HEIGHT - new_size[1] - PADDING_BOTTOM))
 
                 new_im.save(f'{OUTPUT_DIR}/{output_file_name}')

@@ -26,35 +26,37 @@ def removebg():
                 continue
 
             else:
-                if os.path.isfile(OUTPUT_DIR +'/'+ output_file_name):
-                    print(f'{output_file_name} exists; skipping')
+                if 1 == 2:
+                    print('something')
+                # if os.path.isfile(OUTPUT_DIR +'/'+ output_file_name):
+                #     print(f'{output_file_name} exists; skipping')
                 else:
                     print(f'{count}/{file_count} Removing BG from {filename}...')
 
                     ###
                     # FIRST ITERATION OF THE IMAGE PROCESS
                     image = cv2.imread(INPUT_DIR +'/'+filename)
-                    gray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
-                    blurred = cv2.bilateralFilter(gray, 6, 231, 231)
+                    # gray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
+                    # blurred = cv2.bilateralFilter(gray, 6, 231, 231)
 
-                    #PLAN B: Canny
-                    thresh = cv2.Canny(blurred, 2, 6)
+                    # #PLAN B: Canny
+                    # thresh = cv2.Canny(blurred, 2, 6)
 
-                    kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (77, 77)) # options: MORPH_RECT,MORPH_ELLIPSE; Also tweak last parameter(x, x)
-                    morphchoice = cv2.morphologyEx(thresh, cv2.MORPH_DILATE, kernel) # options: MORPH_CLOSE,MORPH_OPEN,MORPH_DILATE,MORPH_ERODE
-                    (cnts, _) = cv2.findContours(morphchoice.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE) # finding_contours
+                    # kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (77, 77)) # options: MORPH_RECT,MORPH_ELLIPSE; Also tweak last parameter(x, x)
+                    # morphchoice = cv2.morphologyEx(thresh, cv2.MORPH_DILATE, kernel) # options: MORPH_CLOSE,MORPH_OPEN,MORPH_DILATE,MORPH_ERODE
+                    # (cnts, _) = cv2.findContours(morphchoice.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE) # finding_contours
                     
-                    #find the biggest contour
-                    c = max(cnts, key = cv2.contourArea)
+                    # #find the biggest contour
+                    # c = max(cnts, key = cv2.contourArea)
                     
-                    #place c back in a list
-                    list_c = [ np.array( c ) ]
+                    # #place c back in a list
+                    # list_c = [ np.array( c ) ]
 
-                    #FILL OUTSIDE OF COUTOUR WITH COLOR
-                    stencil = np.zeros(image.shape[:-1]).astype(np.uint8)
-                    cv2.fillPoly(stencil, list_c, MASK_VALUE)
-                    sel = stencil != MASK_VALUE # select everything that is not MASK_VALUE
-                    image[sel] = FILL_COLOR # and fill it with FILL_COLOR
+                    # #FILL OUTSIDE OF COUTOUR WITH COLOR
+                    # stencil = np.zeros(image.shape[:-1]).astype(np.uint8)
+                    # cv2.fillPoly(stencil, list_c, MASK_VALUE)
+                    # sel = stencil != MASK_VALUE # select everything that is not MASK_VALUE
+                    # image[sel] = FILL_COLOR # and fill it with FILL_COLOR
 
                     ###
                     # SECOND ITERATION OF THE IMAGE PROCESS
@@ -126,8 +128,8 @@ try:
                 print('please specify folders')
             elif OUTPUT_DIR == INPUT_DIR:
                 print('Output Folder cannot be same as the Input Folder')
-            elif os.listdir(OUTPUT_DIR) :
-                print('Output Folder must be Empty')
+            # elif os.listdir(OUTPUT_DIR) :
+            #     print('Output Folder must be Empty')
             else:
                 removebg()
 

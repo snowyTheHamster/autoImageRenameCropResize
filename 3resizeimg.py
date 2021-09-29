@@ -17,6 +17,10 @@ def resizeitup():
             file_path = os.path.join(INPUT_DIR, filename)
             file_name, file_ext = os.path.splitext(file_path)
             output_file_name = os.path.basename(file_name) + file_ext # save imagename (change ext if you want)
+            # if the output file already exists, skip it
+            if os.path.isfile(f'{OUTPUT_DIR}/{output_file_name}'):
+                print('output file already exists, skipping...')
+                continue
 
             if file_ext not in image_exts:
                 print("Skipping " + filename + " (not a supported image file)")
@@ -75,8 +79,8 @@ try:
                 print('please specify folders, must add values for paddings')
             elif OUTPUT_DIR == INPUT_DIR:
                 print('Output Folder cannot be same as the Input Folder')
-            elif os.listdir(OUTPUT_DIR) :
-                print('Output Folder must be Empty')
+            # elif os.listdir(OUTPUT_DIR) :
+            #     print('Output Folder must be Empty')
             else:
                 resizeitup()
 

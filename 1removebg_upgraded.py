@@ -129,7 +129,7 @@ layout = [
             sg.Text('R:'), sg.Slider(key='_FILL_VALUE3_', range=(0,255), default_value=255, size=(10,15), orientation='horizontal')],
     [sg.Text('')],
     [sg.Button("Process", size=(10, 1), bind_return_key=True, key='_PROCESS_')],
-    # [sg.Output(size=(60, 10))],
+    [sg.Output(size=(60, 5))],
 ]
 
 window: object = sg.Window('OpenCV BG Removal', layout, element_justification='left')

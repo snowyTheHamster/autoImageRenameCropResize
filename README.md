@@ -13,6 +13,9 @@ Run each of these scripts to launch a gui app.
 
 You can also run the .ipynb versions on Google Colabs.
 
+To run on your workstation, you will need to install python from [https://www.python.org/](https://www.python.org/)
+
+When prompted, make sure to set python to PATH and install PIP.
 
 ### Create a Project Directory
 ```
@@ -43,17 +46,20 @@ python -m venv .venv
 ### Install the modules from the provided req file
 ```
 python -m pip install --upgrade pip
-pip install -r requirements.txt
+pip install -r requirements.txts
 ```
 
-## Running 1removeby.py
+## Running 1removebg_upgraded.py (upgraded)
 
-1. prepare folder with images you want to process
-1. create a folder to output the results
-1. You can set the new background color by adjusting the rgb sliders.
+1. prepare folder with images you want to process (input folder).
+1. create a folder to output the results.
+1. Copy the files in the input folder to the output folder.
+1. You can adjust the threshold, set the new background color by adjusting the rgb sliders.
+2. Click Process and hit Enter.
+3. Once your happy with a result, remove it from the output folder and repeat.
 
 ```
-python 1removebg.py
+python 1removebg_upgraded.py
 ```
 
 **NOTE:** Detecting white objects against a white background is difficult.
@@ -61,6 +67,16 @@ python 1removebg.py
 To maximize the success rate, try to **blowing out your white background** during the photo shoot.
 
 Keep your object's edges as distinct from the background as possible.
+
+**Installing the GUI app**
+
+to install this script as a gui app, run the following commands:
+
+```
+pyinstaller --onefile 1removebg_upgraded.py
+```
+
+The executable app will be saved in the dist folder for your operating system.
 
 ---
 
